@@ -1,4 +1,4 @@
-export default results = {
+const sampleResults = {
     "text": "cheese",
     "parsed": [
       {
@@ -1541,3 +1541,5 @@ export default results = {
       }
     }
   }
+
+  export default sampleResults;

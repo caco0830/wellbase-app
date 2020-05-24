@@ -2,7 +2,10 @@ import React, {createContext, useReducer} from 'react';
 
 const value = {
     results: [],
-    setResults: () => {}
+    setResults: () => {},
+    diary: [],
+    setDiary: () => {},
+    getFoods: () => {}//TODO: FOR TESTING ONLY
 };
 
 

@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {searchFood} from '../../Services/foodDataAPI';
 import useForm from '../../Hooks/useForm';
 import ResultCard from '../ResultCard/ResultCard';
@@ -9,7 +9,13 @@ function SearchForm() {
     const {handleChange, handleSubmit, values} = useForm(search);
 
     //Context
+
+    useEffect(() => {
+        //Clear results with the component loads
+        setResults([]);
+    }, []);
     const cont = useContext(AppContext);
+    //console.log(cont)
 
     async function search() {
         setResults(await searchFood(values.searchValue));
@@ -17,7 +23,9 @@ function SearchForm() {
 
     return ( 
         <div className="Search">
-            <form onSubmit={handleSubmit} className="Search__form">
+            {/* <form onSubmit={handleSubmit} className="Search__form"> */}
+
+            <form onSubmit={cont.getFoods} className="Search__form">
                 <label htmlFor="searchValue" className="Search__input-label">Search for an Item: </label>
                 <input type="text" className="Search__input-value" name="searchValue" id="searchvalue" placeholder="food" onChange={handleChange} value={values.searchvalue}/>
                 <button type="submit" className="button">Search</button>

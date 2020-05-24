@@ -19,8 +19,7 @@ export async function searchFood(searchTerm){
         .then(data => {
             console.log(data.hints);
             data.hints.forEach((value, index) => {
-                //console.log(value, index);
-                foods.push(createFood(value));
+                foods.push(createFood.generateFood(value));
             });
         })
         .catch(error => {
@@ -28,4 +27,10 @@ export async function searchFood(searchTerm){
         });
 
     return foods;
+}
+
+export async function getNutrients(foodId, unit, quantity) {
+    let nutrients = [];
+
+    //await fetch()
 }
