@@ -58,8 +58,21 @@ const createFood = {
 
             },
         };
-
-
+    },
+    generateNutrients(item) {
+        //console.log(typeof item.totalNutrients);
+        return {
+            calories: item.calories,
+            //nutrients: item.totalNutrients
+            nutrientList: Object.entries(item.totalNutrients).map(m => {
+                //console.log(m)
+                return {
+                    label: m[1].label,
+                    quantity: m[1].quantity,
+                    unit: m[1].unit
+                }
+            })
+        }
     }
 }
 

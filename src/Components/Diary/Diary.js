@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext} from 'react';
 import AppContext from '../../AppContext';
 
 function Diary(props) {
@@ -16,7 +16,7 @@ function Diary(props) {
      * 
      * 
      */
-    const {diary, setDiary} = useContext(AppContext);
+    const {diary} = useContext(AppContext);
 
 
     return (

@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {searchFood} from '../../Services/foodDataAPI';
 import useForm from '../../Hooks/useForm';
 import ResultCard from '../ResultCard/ResultCard';
@@ -6,7 +6,7 @@ import AppContext from '../../AppContext';
 
 function SearchForm() {
     const {results, setResults} = useContext(AppContext);
-    const {handleChange, handleSubmit, values} = useForm(search);
+    const {handleChange, values} = useForm(search);
 
     //Context
 
@@ -32,8 +32,8 @@ function SearchForm() {
             </form>
             <div className="Search__results">
                     {
-                        results ? results.map(item => {
-                            return <ResultCard key={item.fdcid} foodItem={item}></ResultCard>
+                        results ? results.map((item,index) => {
+                            return <ResultCard key={index} foodItem={item}></ResultCard>
                         })
                         : ''
                     }

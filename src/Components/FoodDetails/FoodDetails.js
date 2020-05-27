@@ -1,6 +1,5 @@
-import React, {useContext, useState, useEffect, useLayoutEffect} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import AppContext from '../../AppContext';
-import createFood from '../../Utilities/createFood';
 import {getNutrients} from '../../Services/foodDataAPI';
 
 function FoodDetails(props) {
@@ -8,6 +7,7 @@ function FoodDetails(props) {
 //TODO: Add quantity picker
 //TODO: Add to list for diary
 //TODO: Diary will be the main screen, foods will be added from there. One button under each diary caterogry
+//TODO: Keep picked value on refresh
 
     const [error, setError] = useState(false);
     const [quantity, setQuantity] = useState(1);
@@ -22,14 +22,14 @@ function FoodDetails(props) {
         foodId: foodId,
         quantity: quantity,
         category: 'breakfast',
-        nutrients
+        nutrients,
+        portionSize
     }
     
     //Context
-    const {results, setResults} = useContext(AppContext); 
+    const {results} = useContext(AppContext); 
     const {diary, setDiary} = useContext(AppContext); 
     
-
     useEffect(() => {
         try{
             setFood(results.find(item => item.id === foodId));
@@ -41,22 +41,19 @@ function FoodDetails(props) {
     }, []); 
 
     const renderPortionSizeOptions = (item) => {
-
-        return item.portions.map(item => {
-
+        return item.portions.map((item, index) => {
             return (
-                <option value={item.label}>{item.label}</option>
+                <option key={index} value={item.label}>{item.label}</option>
                 );
         });
     }
 
-    
-
     useEffect(() => {
         try{
-            if(food != undefined){
-            portionSizeOptions = renderPortionSizeOptions(food);
-            setPortionSize(food.portions[0].label);
+            if(food !== undefined){
+                //console.log(portionSizeOptions);
+                setPortionSize(food.portions[0].label);
+                //portionSizeOptions = renderPortionSizeOptions(food);
             }
             
         }catch(err){
@@ -64,15 +61,29 @@ function FoodDetails(props) {
         }
     }, [food]);
     
+    //TODO: Not convinced this should be here
+    //Created picklist options for portion size list
+    portionSizeOptions = food ? renderPortionSizeOptions(food) : '';
+
     const addToDiary = () => {
         let temp = diary || [];
         temp.push(diaryItem);
         setDiary(temp);
     }
 
-    // const getNutrients = () => {
-    //     nutrients = getNutrients(foodId, );
-    // }
+    const getNutrientInfo = async () => {
+        let portionURI = !food ? '' : food.portions.find(item => item.label === portionSize).uri;
+        let temp = '';
+        //console.log(portionURI);
+
+        temp = await getNutrients(
+            foodId,
+            portionURI,
+            quantity
+            );
+        //console.log(temp);
+        setNutrients(temp);
+    }
     
     //console.log(food);
 
@@ -93,7 +104,16 @@ function FoodDetails(props) {
             <div>Carbs: {food.nutrients.carbs.value} {food.nutrients.carbs.unit} </div>
             <div>Fat: {food.nutrients.fat.value} {food.nutrients.fat.unit} </div>
             <button className="FoodDetails__add" onClick={addToDiary}>Add</button>
+            <button onClick={getNutrientInfo}>Get Nutrients</button>
             <br/>
+            {
+                nutrients.nutrientList ? nutrients.nutrientList.map((n, index) => {
+                                return (
+                                <div key={index}>{n.label}: {n.quantity} {n.unit}</div>
+                                );
+                            })
+                            : ''
+            }
         </div>
     );
 

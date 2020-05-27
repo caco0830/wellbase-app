@@ -1,4 +1,4 @@
-import React, {createContext, useReducer} from 'react';
+import {createContext} from 'react';
 
 const value = {
     results: [],
